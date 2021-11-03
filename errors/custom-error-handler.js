@@ -1,12 +1,18 @@
+const { StatusCodes } = require("http-status-codes");
+
 class CustomErrorHandler extends Error {
   constructor(status, message) {
-    super(status);
-    this.message = message;
+    super();
     this.status = status;
+    this.message = message;
   }
 
   static alreadyExist(message) {
-    return new CustomErrorHandler(409, message);
+    return new CustomErrorHandler(StatusCodes.CONFLICT, message);
+  }
+
+  static UnAuthenticationError(message) {
+    return new CustomErrorHandler(StatusCodes.UNAUTHORIZED, message);
   }
 }
 
