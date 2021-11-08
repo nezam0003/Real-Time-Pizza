@@ -7,16 +7,13 @@ const app = express();
 /****** Internal Dependencies */
 const connectDB = require("./database/connectDB");
 const { PORT, MONGO_URI } = require("./config");
-const authenticateUser = require("./middlewares/auth");
 const productsRouter = require("./routes/products");
 const authRouter = require("./routes/auth");
-const userRouter = require("./routes/user");
 const errorHandler = require("./middlewares/error-handler");
 
 /****** Built-in Middleware */
 app.use(express.json());
 
-app.use("/api/v1/user", authenticateUser, userRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/products", productsRouter);
 
