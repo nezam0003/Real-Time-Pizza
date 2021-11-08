@@ -14,6 +14,10 @@ class CustomErrorHandler extends Error {
   static UnAuthenticationError(message) {
     return new CustomErrorHandler(StatusCodes.UNAUTHORIZED, message);
   }
+
+  static BadRequestError(message) {
+    return new CustomErrorHandler(StatusCodes.BAD_REQUEST, message);
+  }
 }
 
 module.exports = CustomErrorHandler;
