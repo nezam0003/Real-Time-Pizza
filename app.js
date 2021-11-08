@@ -23,9 +23,6 @@ app.use("/api/v1/products", productsRouter);
 /****** Custom Middlewares */
 app.use(errorHandler);
 
-// port
-// const PORT = process.env.PORT || 4000;
-
 /******* Connect DB */
 const start = async () => {
   try {

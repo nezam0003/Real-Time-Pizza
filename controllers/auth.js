@@ -1,7 +1,12 @@
 const Joi = require("joi");
 const { CustomErrorHandler } = require("../errors");
 const User = require("../models/User");
+const RefreshToken = require("../models/refresh_token");
 const { StatusCodes } = require("http-status-codes");
+const {
+  JWT_REFRESH_SECRET,
+  JWT_REFRESH_TOKEN_LIFE_TIME,
+} = require("../config");
 
 /******** Register Controller ******/
 
@@ -34,7 +39,17 @@ const register = async (req, res, next) => {
 
   const user = await User.create({ ...req.body });
   const token = user.createJWT();
-  res.status(StatusCodes.CREATED).json({ user: { name: user.name }, token });
+  const refresh_token = user.createJWT(
+    JWT_REFRESH_SECRET,
+    JWT_REFRESH_TOKEN_LIFE_TIME
+  );
+
+  // Database whitelist
+  await RefreshToken.create({ token: refresh_token });
+
+  res
+    .status(StatusCodes.CREATED)
+    .json({ user: { name: user.name }, token, refresh_token });
 };
 
 /******** Login Controller ******/
@@ -71,7 +86,17 @@ const login = async (req, res, next) => {
   }
 
   const token = user.createJWT();
-  res.status(StatusCodes.OK).json({ user: { name: user.name }, token });
+  const refresh_token = user.createJWT(
+    JWT_REFRESH_SECRET,
+    JWT_REFRESH_TOKEN_LIFE_TIME
+  );
+
+  // Database whitelist
+  await RefreshToken.create({ token: refresh_token });
+
+  res
+    .status(StatusCodes.OK)
+    .json({ user: { name: user.name }, token, refresh_token });
 };
 
 module.exports = {

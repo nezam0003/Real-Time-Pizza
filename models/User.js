@@ -38,14 +38,13 @@ UserSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-UserSchema.methods.createJWT = function () {
-  return jwt.sign(
-    { _id: this._id, name: this.name, role: this.role },
-    JWT_SECRET,
-    {
-      expiresIn: JWT_LIFE_TIME,
-    }
-  );
+UserSchema.methods.createJWT = function (
+  secret = JWT_SECRET,
+  tokenLifeTime = JWT_LIFE_TIME
+) {
+  return jwt.sign({ _id: this._id, name: this.name, role: this.role }, secret, {
+    expiresIn: tokenLifeTime,
+  });
 };
 
 UserSchema.methods.comparePassword = async function (candidatePassword) {
