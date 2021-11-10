@@ -1,6 +1,6 @@
 const userController = require("./user");
 const registerController = require("./register");
-const loginController = require("./login");
+const { loginController, logOutController } = require("./login");
 const refreshTokenController = require("./refresh-token");
 
 module.exports = {
@@ -8,4 +8,5 @@ module.exports = {
   registerController,
   loginController,
   refreshTokenController,
+  logOutController,
 };

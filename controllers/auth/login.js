@@ -54,4 +54,25 @@ const loginController = async (req, res, next) => {
     .json({ user: { name: user.name }, token, refresh_token });
 };
 
-module.exports = loginController;
+/******* Logout Controller */
+
+const logOutController = async (req, res, next) => {
+  // validate request object
+  const refreshTokenSchema = Joi.object({
+    refresh_token: Joi.string().required(),
+  });
+
+  const { error } = refreshTokenSchema.validate(req.body);
+  if (error) {
+    return next(error);
+  }
+
+  try {
+    await RefreshToken.deleteOne({ token: req.body.refresh_token });
+  } catch (error) {
+    return next(new Error("Something went wrong"));
+  }
+  res.status(StatusCodes.OK).json({ msg: "User logout" });
+};
+
+module.exports = { loginController, logOutController };
